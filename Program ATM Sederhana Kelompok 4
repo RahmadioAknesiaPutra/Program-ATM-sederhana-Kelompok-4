@@ -1,226 +1,439 @@
+//***************************************************************
+//                   FILE HEADER YANG DIGUNAKAN
+//****************************************************************
+
 #include<iostream>
-#include<stdlib.h>
+#include<fstream>
+#include<cctype>
+#include<iomanip>
 using namespace std;
 
-//variabel global
-int jumlah=500000;
-int pin = 20010026;
-int cod;
+//***************************************************************
+//                   CLASS YANG DIGUNAKAN
+//****************************************************************
 
-//function
-int tf()
+
+class account
 {
-    string nama[20], jenis[20], ket[30];
-    int norek[20], tfan[20];
-    cout<<endl;
-    cout<<" ========== TRANSFER UANG ===========\n"<<endl;
-    for(int i=0; i<1; i++)
-    {
-        cout<<" Masukan Nama Pemilik Rekening : ";cin>>nama[i];
-        cout<<" Masukan Jenis ATM bank        : ";cin>>jenis[i];
-        cout<<" Masukan No Rekening Tujuan    : ";cin>>norek[i];
-        cout<<" Masukan Jumlah Transfer uang RP.";cin>>tfan[i];
-        cout<<" Keterangan Pembayaran         : ";cin>>ket[i];
-        cout<<endl;
-        jumlah=jumlah-tfan[i];
-    }
+	int acno;
+	char name[50];
+	int deposit;
+	char type;
+	int password;
+	int acnotransfer;
+public:
+	void create_account();	//FUNGSI UNTUK MEMBUAT INPUT DATA USER BARU 
+	void show_account() const;	//FUNGSI UNTUK MENAMPILKAN DATA USER
+	void modify();	//FUNGSI UNTUK MERUBAH DATA
+	void dep(int);	//FUNGSI UNTUK DEPOSIT
+	void draw(int);	//FUNGSI UNTUK TARIK TUNAI
+	int retacno() const;	//FUNGSI UNTUK MENGEMBALIKAN NILAI DARI NOREK 
+	int retdeposit() const;	//FUNGSI UNTUK MENGEMBALIKAN NILAI DARI SALDO
+	int retpassword() const;	//FUNGSI UNTUK MENGEMBALIKAN NILAI DARI PASSWORD
+	void write_account();	//FUNGSI UNTUK MENYIMPAN DATA AKUN DI FILE
+	void display_sp(int,int);	//FUNGSI UNTUK MENAMPILKAN DATA USER SESUAI NOREK DAN PASSWORD
+	void modify_account(int,int);	//FUNGSI UNTUK MENGUBAH DATA USER SESUAI NOREK DAN PASSWORD
+	void delete_account(int,int);	//FUNGSI UNTUK MENGHAPUS DATA USER SESUAI NOREK DAN PASSWORD
+	void deposit_withdraw(int, int,int); // FUNGSI UNTUK TRANSFER/DEPOSIT/PENARIKAN TUNAI
+	int intro();	//TAMPILAN AWAL
+	int screen(int,int);
+};         
 
-     cout<< " Preview Pembayaran Anda";
-            cout<<endl;
-            cout << "--------------------------------------------------------------------------------------------------------------" << endl;
-            cout << "NO" << "\t" << "Nama" << "\t \t" << "Jenis" << "\t\t"  << "No Rek" << "\t\t" << "Jumlah"<<" \t\t"<< "Keterang"<<endl;
-            cout << "--------------------------------------------------------------------------------------------------------------" << endl;
-
-            for(int i=0; i<1; i++){
-                cout<<i<<" \t "<<nama[i]<<" \t \t "<<jenis[i]<<" \t\t"<<norek[i]<<" \t\t "<<tfan[i]<<" \t\t "<<ket[i]<<endl;
-                cout<<"-------------------------------------------------------------------------------------------------------------"<<endl;
-            }
-    cout<<" Terimakasih Transaksi Anda sedang diProses .... "<<endl;
-    cout<<" SISA SALDO RP."<<jumlah<<endl;
-    cout<<endl;
-    cout<<" Masukan kode angka bebas untuk kembali ke home = ";cin>>cod;
-    system("cls");
-
-}
-int nabung()
+void account::create_account()
 {
-    int uang;
-    cout<<endl;
-    cout<<" ========== SETOR TUNAI ==========="<<endl;
-    cout<<endl;
-    cout<<" Masukan Jumlah Uang RP. ";cin>>uang;
-
-    jumlah = jumlah + uang;
-    cout<<" Uang Pada ATM anda saat ini RP. "<<jumlah<<endl;
-    cout<<"......."<<endl;
-    cout<<endl;
-    cout<<" Masukan kode angka bebas untuk kembali ke home = ";cin>>cod;
-    system("cls");
-
+	cout<<"\nMasukan Nomor Rekening. :";
+	cin>>acno;
+	cout<<"\nMasukan Password. :";
+	cin>>password;
+	cout<<"\n\nMasukan Nama Pemegang Akun. : ";
+	cin.ignore();
+	cin.getline(name,50);
+	cout<<"\nMasukan Jumlah Deposit Awal. : ";
+	cin>>deposit;
+	cout<<"\n\n\nAkun Berhasil Dibuat..";
 }
 
-//prosedure
-void tampil()
+void account::show_account() const
 {
-    cout<<endl;
-    cout<<"================= INFORMASI KELOMPOK ================\n"<<endl;
-    cout<<endl;
-    cout<<"|====|=================|=====================|==============|===================|===============|"<<endl;
-    cout<<"| No |   PIN           |     Nama            |    NIM       |   Prodi           |     Saldo     |"<<endl;
-    cout<<"|====|=================|=====================|==============|===================|===============|"<<endl;
-    cout<<"| 1  | 20010026        | Joko Ardiyanto      | c20010007    | Teknik Informatika|"<< jumlah <<"\t\t|"<<endl;
-    cout<<"|====|=================|=====================|==============|===================|===============|"<<endl;
-    cout<<"| 2  | 20010026        | Luqman Athariq      | c20010016    | Teknik Informatika|"<< jumlah <<"\t\t|"<<endl;
-    cout<<"|====|=================|=====================|==============|===================|===============|"<<endl;
-    cout<<"| 3  | 20010026        | Satrio Rizky Samudro| c20010003    | Teknik Informatika|"<< jumlah <<"\t\t|"<<endl;
-    cout<<"================================================================================================|"<<endl;
-    cout<<endl;
-    cout<<" Masukan kode angka bebas untuk kembali ke home = ";cin>>cod;
-    system("cls");
-}
-void saldo()
-{
-    cout<<endl;
-    cout<<"============================SALDO ATM ANDA======================================\n"<<endl;
-    cout<<" \t SALDO ANDA RP."<<jumlah<<endl;
-    cout<<"================================================================================"<<endl;
-    cout<<endl;
-    cout<<" Masukan kode angka bebas untuk kembali ke home = ";cin>>cod;
-    system("cls");
-}
-void exit()
-{
-    cout<<"=================================================================="<<endl;
-    cout<<" \t \t Terimakasih ... "<<endl;
-    cout<<" \t \t Universitas Boyolali 2021/2022 "<<endl;
-    cout<<"=================================================================="<<endl;
-}
-void judul()
-{
-    cout<<" \t\t\t\t\t FINAL PROJECT STUKTUR DATA "<<endl;
-    cout<<" \t\t\t\t\t MESIN ATM SEDERHANA "<<endl;
-    cout<<endl;
-    cout<<" \t\t\t ========================================================== \t \t"<<endl;
-    cout<<endl;
-    cout<<"#################Welcome to ATM JAYA##########################"<<endl;
-    cout<<" \t \t Kelompok 2 "<<endl;
-    cout<<" \t \t your PIN 20010026 "<<endl;
-    cout<<"#################@uby/fakultas_ilmu_komputer/2021##############"<<endl<<endl;
-
+	cout<<"\nNomor Rekening. : "<<acno;
+	cout<<"\nPassword :"<<password;
+	cout<<"\nNama Pemegang Akun : ";
+	cout<<name;
+	cout<<"\nJumlah Saldo : "<<deposit;
 }
 
-int main()
+
+void account::modify()
 {
-    //variabel
-    int pilihan;
-    int pilih2;
-    int ambil[2]={500000,1000000};
-
-    judul();
-    cout<<" Masukan PIN anda : ";cin>>pin;
-    kembali:
-    if(pin == 20010026){
-        cout<<endl;
-        cout<<"\t<-1 Transfer Uang         INFO DATA 4->"<<endl<<endl;
-        cout<<"\t<-2 Menabung             INFO SALDO 5->"<<endl<<endl;
-        cout<<"\t<-3 Penarikan                Keluar 6->"<<endl<<endl;
-        cout<<endl;
-        cout<<" Masukan Pilihan = ";cin>>pilihan;
-
-    switch(pilihan)
-    {
-    case 1:
-        system("cls");
-        tf();
-        goto kembali;
-        break;
-
-    case 2:
-        system("cls");
-        nabung();
-        goto kembali;
-        break;
-    case 3:
-        system("cls");
-        cout<<" ==================================="<<endl;
-        cout<<" \t PENARIKAN UANG "<<endl;
-        cout<<" "<<endl;
-        cout<<" 1. RP.500.000           2. RP.1.000.000"<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<" =================================="<<endl;
-        cout<<endl;
-        cout<<" Masukan Pilihan : ";cin>>pilih2;
-        system("cls");
-            switch(pilih2)
-            {
-            case 1:
-                cout<<"\t\tPenarikan Berhasil"<<endl;
-                cout<<endl;
-                cout<<endl;
-                cout<<"Anda melakukan penarikan Tunai sebasar RP.500.000"<<endl;
-                jumlah=jumlah-ambil[0];
-                cout<<""<<endl;
-                cout<<"Sisa Saldo Anda RP. "<<jumlah<<endl;
-                cout<<endl;
-                cout<<" Masukan kode angka bebas untuk kembali ke home = ";cin>>cod;
-                system("cls");
-                goto kembali;
-                break;
-            case 2:
-                cout<<"\t\tPenarikan Berhasil"<<endl;
-                cout<<endl;
-                cout<<endl;
-                cout<<"Anda melakukan penarikan Tunai sebasar RP.1000.000"<<endl;
-                jumlah=jumlah-ambil[1];
-                cout<<""<<endl;
-                cout<<"Sisa Saldo Anda RP. "<<jumlah<<endl;
-                cout<<endl;
-                cout<<" Masukan kode angka bebas untuk kembali ke home = ";cin>>cod;
-                system("cls");
-                goto kembali;
-                break;
-
-            default:
-                cout<<" Pilihan yang anda masukan salah "<<endl;
-                cout<<"......"<<endl;
-                system("cls");
-            }
-
-        break;
-    case 4:
-        system("cls");
-        tampil();
-        goto kembali;
-        break;
-    case 5:
-        system("cls");
-        saldo();
-        goto kembali;
-        break;
-    case 6:
-        system("cls");
-        exit();
-        break;
-
-    default:
-        system("cls");
-        cout<<" Pilihan salah ...... !!"<<endl;
-        break;
-
-    }
-
-    }else{
-        system("cls");
-        cout<<endl;
-        cout<<endl;
-        cout<<" ===========================WARNING========================= "<<endl;
-        cout<<" \tMAAF PIN YANG ANDA MASUKAN SALAH "<<endl;
-        cout<<" \tSILAHKAN ULANGI DAN PERIKSA PIN ANDA "<<endl;
-        cout<<" \tTERIMAKASIH "<<endl;
-        cout<<" =========================================================== "<<endl;
-        cout<<endl;
-        cout<<" \t \t Progran Selesai ............."<<endl;
-        cout<<endl;
-    }
+	cout<<"\nNomor Rekening. : "<<acno;
+	cout<<"\nUbah Nama Pemegang Akun. : ";
+	cin.ignore();
+	cin.getline(name,50);
 }
+
+	
+void account::dep(int x)
+{
+	deposit+=x;
+}
+	
+void account::draw(int x)
+{
+	deposit-=x;
+}
+	
+	
+int account::retacno() const
+{
+	return acno;
+}
+
+int account::retpassword() const
+{
+	return password;
+}
+
+int account::retdeposit() const
+{
+	return deposit;
+}
+
+char account::rettype() const
+{
+	return type;
+}
+
+
+//***************************************************************
+//    	DEKLARASI FUNGSI
+//****************************************************************
+
+
+//***************************************************************
+//    	FUNGSI UTAMA PROGRAM
+//****************************************************************
+
+int main(){
+	account ATM;
+	ATM.intro();
+	
+	return 0;
+}
+
+int account::screen(int acno,int password)
+{
+	char ch;
+	int num;
+	do
+	{
+		system("cls");
+		cout<<"\n\n\n\tMENU UTAMA";
+		cout<<"\n\n\t01. DEPOSIT";
+		cout<<"\n\n\t02. TARIK TUNAI";
+		cout<<"\n\n\t03. CEK SALDO";
+		cout<<"\n\n\t04. TRANSFER";
+		cout<<"\n\n\t05. TUTUP AKUN";
+		cout<<"\n\n\t06. UBAH AKUN";
+		cout<<"\n\n\t07. KELUAR";
+		cout<<"\n\n\tPilih Menu (1-7) ";
+		cin>>ch;
+		system("cls");
+		switch(ch)
+		{
+		case '1':
+			deposit_withdraw(acno,password, 1);
+			break;
+		case '2':
+			deposit_withdraw(acno,password, 2);
+			break;
+		case '3': 
+			display_sp(acno,password);
+			break;
+		case '4':
+			deposit_withdraw(acno,password, 3);
+			break;
+		case '5':
+			delete_account(acno,password);
+			break;
+		 case '6':
+			modify_account(acno,password);
+			break;
+		 case '7':
+			cout<<"\n\n\tTERIMA KASIH TELAH MENGGUNAKAN SISTEM KAMI";
+			break;
+		 default :cout<<"\a";
+		}
+		cin.ignore();
+		cin.get();
+	}while(ch!='7');
+	return 0 ;
+}
+
+
+//***************************************************************
+//    	FUNGSI UNTUK MENULIS FILE
+//****************************************************************
+
+void account::write_account()
+{
+	account ac;
+	ofstream outFile;
+	outFile.open("akun.txt",ios::binary|ios::app);
+	ac.create_account();
+	outFile.write(reinterpret_cast<char *> (&ac), sizeof(account));
+	outFile.close();
+}
+
+//***************************************************************
+//    	FUNGSI UNTUK MEMBACA DATA DI FILE
+//****************************************************************
+
+void account::display_sp(int acno,int password)
+{
+	account ac;
+	bool flag=false;
+	ifstream inFile;
+	inFile.open("akun.txt",ios::binary);
+	if(!inFile)
+	{
+		cout<<"File tidak bisa dibuka !! Silahkan tekan apa saja...";
+		return;
+	}
+	cout<<"\nDATA SALDO\n";
+
+    	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(account)))
+	{
+		if(ac.retacno()==acno and ac.retpassword() == password)
+		{
+			ac.show_account();
+			flag=true;
+		}
+	}
+	inFile.close();
+	if(flag==false)
+		cout<<"\n\nNomor Rekening tidak ada";
+}
+
+
+//***************************************************************
+//    	FUNGSI UNTUK MERUBAH DATA AKUN
+//****************************************************************
+
+void account::modify_account(int acno,int password)
+{
+	bool found=false;
+	account ac;
+	fstream File;
+	File.open("akun.txt",ios::binary|ios::in|ios::out);
+	if(!File)
+	{
+		cout<<"File tidak bisa dibuka !! Silahkan tekan apa saja...";
+		return;
+	}
+	while(!File.eof() && found==false)
+	{
+		File.read(reinterpret_cast<char *> (&ac), sizeof(account));
+		if(ac.retacno()== acno and ac.retpassword()==password)
+		{
+			ac.show_account();
+			cout<<"\n\nMasukan Detail Terbaru"<<endl;
+			ac.modify();
+			int pos=(-1)*static_cast<int>(sizeof(account));
+			File.seekp(pos,ios::cur);
+			File.write(reinterpret_cast<char *> (&ac), sizeof(account));
+			cout<<"\n\n\t Berhasil Diubah";
+			found=true;
+		  }
+	}
+	File.close();
+	if(found==false)
+		cout<<"\n\n Data tidak ditemukan ";
+}
+
+//***************************************************************
+//    	FUNGSI UNTUK MENGHAPUS DATA DI FILE
+//****************************************************************
+
+
+void account::delete_account(int acno,int password)
+{
+	account ac;
+	ifstream inFile;
+	ofstream outFile;
+	inFile.open("akun.txt",ios::binary);
+	if(!inFile)
+	{
+		cout<<"File tidak bisa dibuka !! Silahkan tekan apa saja...";
+		return;
+	}
+	outFile.open("Temp.txt",ios::binary);
+	inFile.seekg(0,ios::beg);
+	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(account)))
+	{
+		if(ac.retacno()==acno and ac.retpassword()==password)
+		{
+			outFile.write(reinterpret_cast<char *> (&ac), sizeof(account));
+		}
+	}
+	inFile.close();
+	outFile.close();
+	remove("akun.txt");
+	rename("Temp.txt","akun.txt");
+	cout<<"\n\n\t Data Dihapus ..";
+}
+
+//***************************************************************
+//    	FUNGSI UNTUK DEPOSIT, TARIK TUNAI DAN TRANSFER
+//****************************************************************
+
+void account::deposit_withdraw(int acno,int password, int option)
+{
+	int amt;
+	bool found=false;
+	account ac;
+	fstream File;
+	File.open("akun.txt", ios::binary|ios::in|ios::out);
+	if(!File)
+	{
+		cout<<"File tidak bisa dibuka !! Silahkan tekan apa saja...";
+		return;
+	}
+	while(!File.eof() && found==false)
+	{
+		File.read(reinterpret_cast<char *> (&ac), sizeof(account));
+		if(ac.retacno()== acno and ac.retpassword()==password)
+		{
+			ac.show_account();
+			if(option==1)
+			{
+				cout<<"\n\n\tMENU DEPOSIT ";
+				cout<<"\n\nMasukan Jumlah Yang Ingin Di Deposit Kan";
+				cin>>amt;
+				ac.dep(amt);
+				int pos=(-1)*static_cast<int>(sizeof(ac));
+				File.seekp(pos,ios::cur);
+				File.write(reinterpret_cast<char *> (&ac), sizeof(account));
+				cout<<"\n\n\t Berhasil Dimasukan";
+				found=true;
+			}
+			if(option==2)
+			{
+				cout<<"\n\n\tMENU TARIK TUNAI ";
+				cout<<"\n\nMasukan Jumlah Yang Ingin Di Tarik";
+				cin>>amt;
+				int bal=ac.retdeposit()-amt;
+				if(ac.retdeposit() < amt)
+					cout<<"Saldo Tidak Cukup";
+				else
+					ac.draw(amt);
+					int pos=(-1)*static_cast<int>(sizeof(ac));
+					File.seekp(pos,ios::cur);
+					File.write(reinterpret_cast<char *> (&ac), sizeof(account));
+					cout<<"\n\n\t Berhasil Di Tarik";
+					found=true;
+			}
+			
+			if(option==3)
+			{
+				cout<<"\n\n\tTRANSFER";
+				cout<<"\n\nMasukan Jumlah ";
+				cin>>amt;
+				int bal=ac.retdeposit()-amt;
+				if(ac.retdeposit() < amt)
+					cout<<"Saldo Tidak Cukup";
+				else
+					ac.draw(amt);
+					int pos=(-1)*static_cast<int>(sizeof(ac));
+					File.seekp(pos,ios::cur);
+					File.write(reinterpret_cast<char *> (&ac), sizeof(account));
+					File.close();
+					cout<<"\n\nMasukan Nomor Rekening Yang Ingin Di Transfer";
+					cin>>acnotransfer;
+					File.open("akun.txt", ios::binary|ios::in|ios::out);
+					if(!File)
+					{
+						cout<<"File tidak bisa dibuka !! Silahkan tekan apa saja...";
+						return;
+					}
+					while(!File.eof() && found==false)
+					{
+						File.read(reinterpret_cast<char *> (&ac), sizeof(account));
+						if(ac.retacno()== acnotransfer)
+						{
+							ac.dep(amt);
+							int pos=(-1)*static_cast<int>(sizeof(ac));
+							File.seekp(pos,ios::cur);
+							File.write(reinterpret_cast<char *> (&ac), sizeof(account));
+							cout<<"\n\n\t Berhasil Mentrasfer";
+							found=true;
+						}
+					}
+				
+			}
+	       }
+         }
+	File.close();
+	if(found==false)
+		cout<<"\n\n Data tidak ditemukan ";
+}
+
+void login(int acno,int password)
+{
+	account ac;
+	bool flag=false;
+	ifstream inFile;
+	inFile.open("akun.txt",ios::binary);
+	if(!inFile)
+	{
+		cout<<"File tidak bisa dibuka !! Silahkan tekan apa saja......";
+		return;
+	}
+	cout<<"\nDATA SALDO\n";
+
+    	while(inFile.read(reinterpret_cast<char *> (&ac), sizeof(account)))
+	{
+		if(ac.retacno()==acno and ac.retpassword() == password)
+		{
+			ac.screen(acno,password);
+			flag=true;
+		}
+	}
+	inFile.close();
+	if(flag==false)
+		cout<<"\n\nGagal,Silahkan Coba Lagi";
+	
+}
+
+//***************************************************************
+//    	FUNGSI INTRO
+//****************************************************************
+
+
+int account::intro()
+{
+   account ac;
+   int opsi;
+   cout << "\nPilihan : \n";
+   cout << "\t1. Buat Akun\n";
+   cout << "\t2. Login\n";
+   cout << "Opsi: ";
+   cin  >> opsi;
+   switch(opsi){
+         case 1:
+            ac.write_account();
+         case 2:
+         	cout  << "Masukkan Norek User: ";
+            cin   >> acno;
+            cout  << "Masukkan Password: ";
+            cin   >> password;
+         	login(acno,password);
+         default:
+            cout << "\nTerima Kasih\n";
+         break;
+      }
+}
+
+//***************************************************************
+//    			AKHIR PROGRAM
+//***************************************************************
+		   
