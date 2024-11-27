@@ -8,7 +8,7 @@ struct User {
     string username;
     string password;
     double balance;
-};
+}
 
 // Fungsi untuk melakukan login
 bool login(User users[], int size, string& loggedInUser) {
